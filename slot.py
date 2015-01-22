@@ -18,4 +18,17 @@ slot = {
                 ("a", {}),
                 ]
             ),
+        "youku":(
+            [
+                ("div", {"class":"panel"}),
+                ("div", {"id":"list1_1"}),
+                ("div", {"class":"collgrid4w"}),
+                ("div", {"class":"items"}),
+                ],
+            [
+                ("ul", {"class":"v"}),
+                ("li", {"class":"v_link"}),
+                ("a", {"target":"video"}),
+                ]
+            ),
        }

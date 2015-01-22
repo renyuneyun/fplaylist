@@ -6,6 +6,7 @@ The name "FPList" is short for "Fetch PlayList".
 FPList is developed to fetch content urls of a video playlist from some websites.  
 ## Supported websites
 iQiYi <http://www.iqiyi.com>
+YouKu <http://www.youku.com>
 
 * * *
 ## License

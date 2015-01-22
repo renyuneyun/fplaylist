@@ -6,6 +6,7 @@ There are two versions of README, (Mainland Traditional) Chinese (README.md) and
 FPList 爲從視頻網站獲取劇集中每集視頻的 URL 而做。  
 ## 支持的網站
 愛奇藝 <http://www.iqiyi.com>
+優酷 <http://http://www.youku.com>
 
 * * *
 ## 許可協議
