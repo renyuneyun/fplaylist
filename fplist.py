@@ -23,26 +23,60 @@ def locate(doc, slot):
         if dep == len(slot):
             return ele
 
-def fetch_iqiyi(doc, slot):
-    ele = locate(doc, slot)
-    lis = ele.getchildren()
+def fetch(doc, slot):
+    ele = locate(doc, slot[0])
+    return find(ele, slot[1])
+
+def find(tree, slot):
+    def match(node, slot):
+        if node.tag == slot[0]:
+            for i in slot[1]:
+                if slot[1][i] != node.attrib.get(i):
+                    return False
+        else:
+            return False
+        return True
+    def getURL(node):
+        return node.attrib["href"]
+
     urls = []
-    for i in lis:
-        if i.tag == "li" and i.attrib.get("class") == "album_item":
-            url = i.getchildren()[0].attrib.get("href")
-            urls.append(url)
+    depth = 0
+    children = [tree.getchildren()] #a stack which stores all children of the relavent parent
+    used = [0] #last used element of children[depth]
+    while depth >= 0:
+        if used[depth] >= len(children[depth]):
+            children.pop()
+            used.pop()
+            depth -= 1
+            continue
+        x = children[depth][used[depth]]
+        used[depth] += 1
+        if match(x, slot[depth]):
+            if depth == len(slot)-1:
+                urls.append(getURL(x))
+            else:
+                children.append(x.getchildren())
+                used.append(0)
+                depth += 1
     return urls
 
 def parse(url, website):
-    slots = {
+    slot = {
             "iqiyi":(
-                ("div", {"data-tab-body":"widget-tab-3"}),
-                ("div", {"data-widget":"albumlist-render"}),
-                ("ul", {"class":"clearfix", "data-albumlist-elem":"cont"})),
+                [
+                    ("div", {"data-tab-body":"widget-tab-3"}),
+                    ("div", {"data-widget":"albumlist-render"}),
+                    ("ul", {"class":"clearfix", "data-albumlist-elem":"cont"}),
+                    ],
+                [
+                    ("li", {"class":"album_item"}),
+                    ("a", {}),
+                    ]
+                ),
            }
     doc = lxml.html.parse(url).getroot()
     title = doc.head.find("title").text
-    return title, globals()["fetch_"+website](doc.body, slots[website])
+    return title, fetch(doc.body, slot[website])
 
 def main(url, website):
     title, urls = parse(url, website)
