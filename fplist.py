@@ -3,6 +3,7 @@
 
 import lxml.html
 import sys
+from slot import slot
 
 def locate(doc, slot):
     """
@@ -61,19 +62,6 @@ def find(tree, slot):
     return urls
 
 def parse(url, website):
-    slot = {
-            "iqiyi":(
-                [
-                    ("div", {"data-tab-body":"widget-tab-3"}),
-                    ("div", {"data-widget":"albumlist-render"}),
-                    ("ul", {"class":"clearfix", "data-albumlist-elem":"cont"}),
-                    ],
-                [
-                    ("li", {"class":"album_item"}),
-                    ("a", {}),
-                    ]
-                ),
-           }
     doc = lxml.html.parse(url).getroot()
     title = doc.head.find("title").text
     return title, fetch(doc.body, slot[website])
